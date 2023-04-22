@@ -6,13 +6,17 @@ if __name__=="__main__":
         command = {
             
         } #TODO
+
+        # 
+
         if command["type"]=="protection": # команда защиты
-            pass
+            send_command()
         elif command["type"]=="sensor": # отправка показаний с датчиков
-            pass
+            read_pin()
         elif command["type"]=="control": # выдача управляющего воздействия на устройство
-            pass
+            send_command()
         elif command["type"]=="stop": # остановка данного ПП
-            pass
+            break
         else:
-            time.sleep(0.1)
+            time.sleep(0.05)
+
