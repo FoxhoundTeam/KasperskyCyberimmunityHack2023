@@ -9,6 +9,9 @@ import subprocess
 import requests
 from flask import Flask, request, jsonify
 
+port = "6090"
+host_name = "0.0.0.0"
+app = Flask(__name__)  # create an app instance
 
 class PP_Triplet:
     """
@@ -32,13 +35,19 @@ class PP_Triplet:
         #TODO встроить прототип из check_process_integrity.py
         return True
     
-    def check_file_integrity(filename, hex_checksum):
+    def check_file_integrity(self, filename, hex_checksum):
         """
         Проверка целостности файла ПП перед запуском
         """
-        f = open(filename, 'rb', buffering=0)
-        result = (hashlib.file_digest(f, 'sha256').hexdigest() == hex_checksum)
+        file_hash = hashlib.sha256()
+        BLOCK_SIZE = 65536
+        f = open(f"./storage/{filename}", 'rb')
+        fb = f.read(BLOCK_SIZE) # Read from the file. Take in the amount declared above
+        while len(fb) > 0: # While there is still data being read from the file
+            file_hash.update(fb) # Update the hash
+            fb = f.read(BLOCK_SIZE)
         f.close()
+        result = (file_hash.hexdigest() == hex_checksum)
         return True
 
     def start_pool(self, filenames):
@@ -48,11 +57,11 @@ class PP_Triplet:
         #     proc = subprocess.Popen(fname)
         #     self.pp_exemplars.append(proc)
 
-        tempFilenames = ["python3 PP1.py", "python3 PP2.py", "python3 PP3.py"]
+        tempFilenames = ["PP1.py", "PP2.py", "PP3.py"]
         for fname in tempFilenames:
             hex_checksum = ""
             if(self.check_file_integrity(fname, hex_checksum)):
-                proc = subprocess.Popen(fname)
+                proc = subprocess.Popen(f"python3 {fname}")
                 self.pp_exemplars.append(proc)
             else:
                 #TODO сообщение об ошибке
@@ -114,6 +123,7 @@ class VersionPool:
     #TODO процесс подписывается, получает сигналы от кафки,
     # или он должен в цикле её опрашивать сам?
 
+versionPool = VersionPool()
 
 @app.route("/upload_update", methods=['POST'])
 def upload_update():
@@ -183,10 +193,6 @@ def upload_settings():
         error_message = f"malformed request {request.data}"
         return error_message, 400
     return jsonify({"operation": "stopped"})
-
-
-app = Flask(__name__)  # create an app instance
-versionPool = VersionPool()
 
 
 if __name__=="__main__":
