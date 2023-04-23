@@ -2,7 +2,7 @@
 name = "monitor"
 version = "0.1.0"
 description = ""
-authors = ["a.petrov"]
+authors = ["Anton Petrov, antonp2@yandex.ru"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

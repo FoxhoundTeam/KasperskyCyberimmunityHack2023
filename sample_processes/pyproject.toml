@@ -2,9 +2,8 @@
 name = "sample-processes"
 version = "0.1.0"
 description = ""
-authors = ["a.petrov"]
+authors = ["Anton Petrov, antonp2@yandex.ru"]
 readme = "README.md"
-packages = [{include = "sample_processes"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
