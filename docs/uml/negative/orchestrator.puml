@@ -1,0 +1,42 @@
+@startuml orchestrator
+actor       Operator            as o
+participant SCADA               as scada
+database    Файловый_сервер     as db
+
+box "PLC" #LightGray
+    participant Оркестратор     as orchestrator #red
+    participant Загрузчик       as downloader
+    participant Хранилище       as storage
+    participant Валидатор       as validator
+    participant Старая_ПП       as old_app
+endbox
+
+
+o -> scada: Запрос на обновление ПП
+scada -> orchestrator: Запрос на обновление ПП
+orchestrator -> downloader: Запрос на загрузку \nобновления
+downloader -> db: Запрос на загрузку
+db -> downloader: Загрузка файлов
+db--
+downloader -> storage: Файлы обновлений
+storage -> validator: Файлы обновлений
+
+validator -> validator: Валидация файлов
+alt Успешная проверка
+    validator -> orchestrator: Файл с обновлением
+    note over orchestrator #Red: Оркестартор модифицирует\n файлы обновления
+else Неуспешная проверка
+    validator -> validator: Регистрация ошибки
+    validator -> orchestrator: Запрет на обновление
+end
+create Новая_ПП
+note over orchestrator #Red: Запуск неаутентичной версии
+orchestrator -[#red]> Новая_ПП: Запуск новой версии
+
+note over orchestrator #Red: Остановка аутентичной версии
+orchestrator -[#red]> old_app: Остановка старой версии
+destroy old_app
+orchestrator -> scada: Результат выполнения
+scada -> o: Отображение результата
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml solution
+actor       Operator as o
+participant SCADA as scada
+
+box "PLC" #LightGray
+    participant SENSORS_IF as sif
+endbox
+participant SENSORS as sensors
+
+
+o -> scada: Запрос данных
+scada -> sif: Запрос показаний
+sif -> sensors: Считывание показаний
+
+activate sensors
+sensors -> sif: Показания
+deactivate sensors
+
+sif -> scada: Данные
+scada -> o: Отображение данных
+
+@enduml

@@ -1,0 +1,27 @@
+@startuml solution
+actor       Operator as o
+participant SCADA as scada
+
+box "PLC" #LightGray
+    participant APP as app
+    participant TRIPLE_VOTING as tv
+endbox
+participant SENSORS as sensors
+
+
+o -> scada: Команда
+scada -> app: Команда
+app -> app: Обработка
+app -> tv: Команда
+tv -> tv: Проверка
+alt Успешная проверка
+    tv -> sensors: Команда
+    sensors -> sensors: Выполнение
+    tv -> scada: Подтверждение
+else Неуспешная проверка
+    tv -> tv: Регистрация ошибки
+    tv -> scada: Уведомление об ошибке
+end
+scada -> o: Отображение результата
+
+@enduml

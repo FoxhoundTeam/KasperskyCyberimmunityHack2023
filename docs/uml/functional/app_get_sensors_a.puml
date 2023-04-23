@@ -1,0 +1,20 @@
+@startuml solution
+
+
+box "PLC" #LightGray
+    participant APP as app
+    participant SENSORS_IF as sif
+endbox
+participant SENSORS as sensors
+
+
+app -> sif: Запрос данных
+sif -> sensors: Считывание показаний
+
+activate sensors
+sensors -> sif: Показания
+deactivate sensors
+
+sif -> app: Данные
+
+@enduml

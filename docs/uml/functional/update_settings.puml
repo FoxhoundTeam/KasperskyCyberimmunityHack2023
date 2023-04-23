@@ -1,0 +1,34 @@
+@startuml update_settings
+actor       Operator            as o
+participant SCADA               as scada
+database    Файловый_сервер     as db
+
+box "PLC" #LightGray
+    participant Оркестратор     as orchestrator
+    participant Загрузчик       as downloader
+    participant Хранилище       as storage
+    participant Валидатор       as validator
+    participant ПП              as app
+endbox
+
+
+o -> scada: Запрос на обновление настроек
+scada -> orchestrator: Запрос на обновление настроек
+orchestrator -> downloader: Запрос на загрузку настроек
+downloader -> db++: Запрос на загрузку
+db -> downloader: Загрузка файла
+db--
+downloader -> storage: Файл настроек
+storage -> validator: Файл настроек
+
+validator -> validator: Валидация настроек
+alt Успешная проверка
+    validator -> app: Обновление настроек
+else Неуспешная проверка
+    validator -> validator: Регистрация ошибки
+end
+validator -> orchestrator: Резульата выполнения
+orchestrator -> scada: Результат выполнения
+scada -> o: Отображение результата
+
+@enduml

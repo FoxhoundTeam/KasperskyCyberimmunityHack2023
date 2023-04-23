@@ -1,0 +1,49 @@
+@startuml solution
+actor       Operator as o
+participant SCADA as scada
+
+box "PLC" #LightGray
+    participant UPDATE_MANAGER as um
+    database    STORAGE as db
+    participant SUPERVISOR as supervisor
+    participant TRIPLE_VOTING as tv
+    participant APP as app
+endbox
+participant SENSORS_IF as sif
+participant SENSORS as sensors
+participant LICENSE as license
+
+activate app
+
+o -> scada: Log_in
+
+loop   
+    
+end
+
+|||
+
+loop
+     
+end
+
+|||
+
+loop
+   
+end
+
+loop
+    
+
+|||
+
+
+loop
+    
+end
+
+|||
+
+o -> scada: Log_out
+@enduml

@@ -1,0 +1,24 @@
+@startuml solution
+actor       Operator as o
+participant SCADA as scada
+
+box "PLC" #LightGray
+    participant APP as app
+    participant TRIPLE_VOTING as tv #Red
+endbox
+participant SENSORS as sensors
+
+
+o -> scada: Команда
+scada -> app: Команда
+app -> app: Обработка
+app -> tv: Команда
+note over tv #red: Не проверил команды \nот недеоверенных компонентов
+note over tv #red: Или подменил команды
+tv -[#red]> sensors: Неаутентичная команда
+sensors -> sensors: Выполнение
+tv -> scada: Подтверждение
+
+scada -> o: Отображение результата
+
+@enduml

@@ -1,0 +1,30 @@
+@startuml solution
+actor       Operator as o
+participant SCADA as scada
+
+box "PLC" #LightGray    
+    participant TRIPLE_VOTING as tv #Red
+    participant APP as app
+    participant SENSORS_IF as sif   
+    
+endbox
+participant SENSORS as sensors
+
+
+o -> scada: Запрос данных
+scada -> app: Запрос данных
+app -> sif: Запрос показаний
+sif -> sensors: Считывание показаний
+
+activate sensors
+sensors -> sif: Показания
+deactivate sensors
+
+sif -> app: Показания
+app -> app: Обработка показаний
+app -> tv: Данные
+note over tv #Red: Целостность данных нарушена
+tv -[#Red]> scada : Нецелостные данные
+scada -> o: Отображение данных
+
+@enduml
