@@ -56,6 +56,8 @@ def sensor_request(**kwargs):
         1: (partial(uniform, 333, 2900), "speed"),
         2: (partial(uniform, 1000, 19000), "power"),
         3: (partial(uniform, 5, 45), "temperature"),
+        4: (partial(uniform, -5, 50), "temperature"),
+        5: (partial(uniform, 1, 190000), "power"),
     }
     generator, sensor_type = sensors_generators_and_types.get(sensor_id, (None, None))
     if generator is not None:
