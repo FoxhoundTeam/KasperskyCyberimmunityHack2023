@@ -52,16 +52,17 @@ def stop(**kwargs):
 @action
 def sensor_request(**kwargs):
     sensor_id = kwargs.get("sensor_id")
-    sensors_generators = {
-        1: partial(randint, 1, 1000),
-        2: partial(uniform, -50, 50),
-        3: partial(randint, -100, 0),
+    sensors_generators_and_types = {
+        1: (partial(uniform, 333, 2900), "speed"),
+        2: (partial(uniform, 1000, 19000), "power"),
+        3: (partial(uniform, 5, 45), "temperature"),
     }
-    generator = sensors_generators.get("id")
+    generator, sensor_type = sensors_generators_and_types.get("id", (None, None))
     if generator is not None:
         return {
             "message_id": kwargs.get("message_id"),
             "message_type": "sensor",
+            "sensor_type": sensor_type,
             "data": generator(),
             "sensor_id": sensor_id,
         }
@@ -92,6 +93,7 @@ class Consumer:
     pkey: "PKey" = field(init=False, default_factory=get_pkey)
 
     def _get_message(self, data: dict[str, Any], destination: str):
+        """Возвращает финальный формат сообщения."""
         data["destination"] = destination
         data["timestamp"] = datetime.now().isoformat()
         str_data = json.dumps(data)
@@ -104,7 +106,7 @@ class Consumer:
         }
 
     def _get_message_data(self, received_message: dict[str, Any]):
-        print(received_message, type(received_message))
+        """Возвращает основное сообщение."""
         message_type = received_message.get("message_type")
         act = ACTIONS.get(message_type)
         if act is None:
@@ -117,15 +119,22 @@ class Consumer:
         return act(**received_message)
 
     def consume(self):
+        # топик, который слушаем
         topic = self.kc.topics[settings.kafka_topic]
+        # топик монитора в который будем писать
         monitor_topic = self.kc.topics[settings.monitor_topic]
 
+        # получаем объект потребителя
         consumer = topic.get_simple_consumer(consumer_group=settings.monitor_topic)
+        # получаем объект производителя
         producer = monitor_topic.get_producer()
 
+        # ждем новых событий
         for message in consumer:
             logger.info("got message {message}", message=message.value.decode())
+            # парсим сообщение
             received_message = json.loads(message.value)
+            # пишем ответ в монитор
             producer.produce(
                 json.dumps(
                     self._get_message(
@@ -135,6 +144,7 @@ class Consumer:
                 ).encode()
             )
             logger.info("processed message")
+            # коммитим смещение
             consumer.commit_offsets()
 
 
