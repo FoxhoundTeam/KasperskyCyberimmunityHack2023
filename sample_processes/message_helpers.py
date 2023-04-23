@@ -27,10 +27,16 @@ class MessageSender:
     kc: KafkaClient = field(init=False, default_factory=get_kc)
     pkey: "PKey" = field(init=False, default_factory=get_pkey)
 
-    def send_message(self, source: str, destination: str, data: dict[str, Any]) -> str:
+    def send_message(
+        self,
+        destination: str,
+        message_type: str,
+        data: dict[str, Any],
+    ) -> str:
         # топик монитора в который будем писать
         monitor_topic = self.kc.topics[settings.monitor_topic]
         data["destination"] = destination
+        data["message_type"] = message_type
         data["timestamp"] = datetime.now().isoformat()
         data["message_id"] = str(uuid4())
         str_data = json.dumps(data)
@@ -44,7 +50,7 @@ class MessageSender:
                         crypto.sign(self.pkey, str_data.encode(), "sha256")
                     ).decode(),
                     "body": str_data,
-                    "source": source,
+                    "source": settings.kafka_topic,
                 }
             ).encode()
         )
@@ -53,12 +59,11 @@ class MessageSender:
 
 @dataclass
 class MessageGetter:
-    topic: str
     kc: KafkaClient = field(init=False, default_factory=get_kc)
 
     def consume(self):
         # топик, который слушаем
-        topic = self.kc.topics[self.topic]
+        topic = self.kc.topics[settings.kafka_topic]
         # получаем объект потребителя
         consumer = topic.get_simple_consumer(consumer_group=settings.monitor_topic)
 

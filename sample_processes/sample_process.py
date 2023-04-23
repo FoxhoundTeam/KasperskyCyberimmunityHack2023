@@ -57,7 +57,7 @@ def sensor_request(**kwargs):
         2: (partial(uniform, 1000, 19000), "power"),
         3: (partial(uniform, 5, 45), "temperature"),
     }
-    generator, sensor_type = sensors_generators_and_types.get("id", (None, None))
+    generator, sensor_type = sensors_generators_and_types.get(sensor_id, (None, None))
     if generator is not None:
         return {
             "message_id": kwargs.get("message_id"),
