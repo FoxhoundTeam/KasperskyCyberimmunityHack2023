@@ -1,3 +1,8 @@
 Pipfile*
 .pytest_cache
 *.pyc
+.venv
+certs
+.env
+__pycache__
+.env.machine*

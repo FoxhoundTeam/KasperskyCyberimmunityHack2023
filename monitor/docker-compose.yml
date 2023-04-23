@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  monitor_consumer:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    command: python3 app.py
+    env_file:
+      - .env
+    depends_on:
+      - broker
+    
+  monitor_worker:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    command: dramatiq tasks
+    env_file:
+      - .env
+    depends_on:
+      - broker
+
+  broker:
+    image: rabbitmq:3.8-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=${BROKER_USER}
+      - RABBITMQ_DEFAULT_PASS=${BROKER_PASS}
+    restart: unless-stopped

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  machine1:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    env_file:
+      - .env.machine1
+    
+  machine2:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    env_file:
+      - .env.machine2

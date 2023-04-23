@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "monitor"
+version = "0.1.0"
+description = ""
+authors = ["a.petrov"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pykafka = "^2.8.0"
+pydantic = {extras = ["dotenv"], version = "^1.10.7"}
+pyopenssl = "^23.1.1"
+dramatiq = {extras = ["rabbitmq", "watch"], version = "^1.14.2"}
+loguru = "^0.7.0"
+ipython = "^8.12.0"
+opensearch-logger = "^1.2.2"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+ruff = "^0.0.262"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
