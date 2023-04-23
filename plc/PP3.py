@@ -2,5 +2,5 @@ import time
 
 if __name__=="__main__":
     while(True):
-        # print("*** Process 3")
+        # третий экземпляр ПП
         time.sleep(0.5)

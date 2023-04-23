@@ -1,5 +1,5 @@
 import time
-
+import json
 
 """
 Имитатор прикладного ПО (ПП) ПЛК 
@@ -20,15 +20,15 @@ class Settings:
         self.update_settings()
 
     def update_settings(self):
-        f = open("/storage/settings_plc.json", "r")
+        f = open("./storage/settings_plc.json", "r")
         data = json.load(f)
         f.close()
-        max_power = data['max_power_mwt']
-        max_speed = data['max_speed_rpm']
-        max_temperature = data['max_temperature_deg']
-        min_power = data['min_power_mwt']
-        min_speed = data['min_speed_rpm']
-        min_temperature = data['min_temperature_deg']
+        max_power = data['max_power']
+        max_speed = data['max_speed']
+        max_temperature = data['max_temperature']
+        min_power = data['min_power']
+        min_speed = data['min_speed']
+        min_temperature = data['min_temperature']
         return
 
 
@@ -40,6 +40,7 @@ class PP:
         Отправка команды исполнительному устройству
         через модуль мажоритарной логики
         """
+
         return
 
     def read_sensor():
@@ -47,6 +48,7 @@ class PP:
         Выгрузка показаний датчиков из очереди сообщений
         от компонента "Интерфейс датчиков"
         """
+
         return
 
     def exec(self):
@@ -78,7 +80,7 @@ class PP:
                 command2 = command
                 self.send_command(command2)
 
-            elif command["type"]=="sensor":
+            elif message_type=="sensor":
                 # ПОЛУЧЕНИЕ ПОКАЗАНИЙ С ДАТЧИКА И ОБРАБОТКА
 
                 # чтение готовой очереди показаний датчиков
@@ -86,10 +88,11 @@ class PP:
 
             elif command["type"]=="control": # выдача управляющего воздействия на устройство
                 send_command()
+
             elif command["type"]=="stop": # остановка данного ПП
                 break
+
             else:
-                self.automatics()
                 time.sleep(0.05)
 
     
@@ -100,10 +103,10 @@ class PP:
     def apply_license(self):
         pass
 
-if __name__ == "__main__":
-    app.run(port=port, host=host_name)
+# if __name__ == "__main__":
+#     app.run(port=port, host=host_name)
 
-if __name__=="__main__":
-    pp = PP()
-    pp.exec()
+# if __name__=="__main__":
+#     pp = PP()
+#     pp.exec()
 
