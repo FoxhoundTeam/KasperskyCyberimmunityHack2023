@@ -236,7 +236,7 @@
 2. В папке compose создать файл .env и [заполнить](#описание-переменных-окружения) его в соответствии с примерами
 3. Запустить команду docker compose up -d с правами суперпользователя
 ```bash
-sudo docker compose up -d
+sudo docker compose -f docker-compose-kafka.yml up -d
 ```
 
 # Описание переменных окружения
