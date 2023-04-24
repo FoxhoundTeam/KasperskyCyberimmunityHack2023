@@ -152,6 +152,51 @@ services:
     networks:
       - hack-network
 
+  sensors:
+    image: sensors
+    build:
+      context: .
+      dockerfile: ./Dockerfile.sensors
+    ports:
+      - "6068:6068"
+    networks:
+      - hack-network
+
+  scada:
+    image: scada
+    build:
+      context: .
+      dockerfile: ./Dockerfile.scada
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    volumes:
+      - ./storage/:/storage
+    ports:
+      - "6069:6069"   
+    networks:
+      - hack-network
+
+  # plc:
+  #   image: plc
+  #   build:
+  #     context: .
+  #     dockerfile: ./Dockerfile.plc
+  #   volumes:
+  #     - ./storage/:/storage
+  #   ports:
+  #     - "6064:6064"
+      # networks:
+      # - hack-network
+
+  license_server:
+    image: license_server
+    build:
+      context: .
+      dockerfile: ./Dockerfile.license_server
+    ports:
+      - "6067:6067"
+    networks:
+      - hack-network
 
 volumes:
   opensearch-data:
