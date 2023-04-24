@@ -33,9 +33,7 @@ data = {
     } 
 
 from pykafka import KafkaClient
-
 client = KafkaClient(hosts="158.160.98.150:9092")
-
 topic = client.topics["monitor"]
 
 producer = topic.get_producer()

@@ -1,0 +1,7 @@
+POST http://localhost:6064/data_in HTTP/1.1
+content-type: application/json
+
+{   
+    "device": "temperature_device",
+    "value":123
+}
