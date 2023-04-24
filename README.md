@@ -71,6 +71,7 @@
   - [POLICIES](#policies)
   - [PRIVATE\_KEY](#private_key)
 - [Генерация ключей компонентов для подписи сообщений Kafka](#генерация-ключей-компонентов-для-подписи-сообщений-kafka)
+- [Тестирование](#тестирование)
 
 # Описание компонентов репозитория
 
@@ -311,3 +312,7 @@ openssl genrsa -out private.pem 512
 
 openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 ```
+
+# Тестирование
+
+Алгоритм приведен в [документе](./tests_algorithm.md)
