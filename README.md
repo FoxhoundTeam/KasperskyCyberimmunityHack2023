@@ -1,3 +1,6 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![GitHub contributors](https://img.shields.io/github/contributors/FoxhoundTeam/KasperskyCyberimmuneHack2023)
+
 # KasperskyCyberimmuneHack2023
 
 Решение команды Foxhound, хакатон KasperskyCyberimmuneHack2023. Демонстрационный сервер развёрнут на http://158.160.98.150 или http://foxhound-team.pro (ссылка действительна до 30 апреля 2023 г.):
