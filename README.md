@@ -3,7 +3,7 @@
 
 # KasperskyCyberimmuneHack2023
 
-Решение команды Foxhound, хакатон KasperskyCyberimmuneHack2023. Демонстрационный сервер развёрнут на http://158.160.98.150 или http://foxhound-team.pro (ссылка действительна до 30 апреля 2023 г.):
+Решение команды Foxhound, хакатон KasperskyCyberimmunityHack2023. Демонстрационный сервер развёрнут на http://158.160.98.150 или http://foxhound-team.pro (ссылка действительна до 30 апреля 2023 г.):
 * Графический интерфейс Broker UI: http://158.160.98.150:8080/ или или http://foxhound-team.pro:8080/,
 * ELK dashboard для просмотра инцидентов: http://158.160.98.150:5601/app/discover/ или http://foxhound-team.pro:5601/app/discover/ (пароль `admin`, логин `admin`, развёрнут для просмотра логов/инцидентов),
 * Apache Kafka: 158.160.98.150:9092 или http://foxhound-team.pro:9092.
